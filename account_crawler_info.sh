@@ -14,9 +14,9 @@ log_file="/tmp/account_crawler_info_${date}.log"
 
 # SQL QUERY
 if [[ "${datetime_convert}" == "hdate" ]]; then 
-  sql_query="select account, datetime(created_at,'unixepoch') as created, datetime(delete_timestamp,'unixepoch') as deleted, status, status_changed_at as changed from account_stat where account LIKE '%"${account_type}"%'"
+  sql_query="select account, datetime(created_at,'unixepoch') as created, datetime(delete_timestamp,'unixepoch') as deleted, status, status_changed_at as changed from account_stat where account LIKE '%"${account_type}"%' and delete_timestamp >= created_at"
 else
-  sql_query="select account, created_at, delete_timestamp, status, status_changed_at as changed from account_stat where account LIKE '%"${account_type}"%'"
+  sql_query="select account, created_at, delete_timestamp, status, status_changed_at as changed from account_stat where account LIKE '%"${account_type}"%' and delete_timestamp >= created_at"
 fi
  
 
@@ -25,10 +25,10 @@ usage_display (){
 cat << USAGE
 
 Usage:
-    Running Syntax: sudo -u swift account_crawler_info.sh [system_type] [account_type]   
-    System Types: synnex, supermicro, container and proxy  
-    Account Type: SOSO, JungleDisk and MossoCloudFS 
-    Convert Date: For Human readible UTC dates give "hdate" as 3rd argument
+    Running Syntax: sudo -u swift account_crawler_info.sh [system_type] (account_type) (hdate)
+    System Types: synnex, supermicro, container and proxy  (Required)
+    Account Type: SOSO, JungleDisk and MossoCloudFS (Optional)
+    Convert Date: For Human readible UTC dates give "hdate" as 3rd argument (Optional)
 
 USAGE
 exit 1
@@ -41,11 +41,11 @@ if [[ -z ${system_type} ]]; then
   exit 1
 fi
 
-if [[ -z ${account_type} ]]; then
-  echo " Error: No account type provided "
-  usage_display
-  exit 1
-fi
+#if [[ -z ${account_type} ]]; then
+#  echo " Error: No account type provided "
+#  usage_display
+#  exit 1
+#fi
 
 
 # Create log file
