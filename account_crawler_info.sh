@@ -55,28 +55,28 @@ echo -e " Header Order: account | created | deleted | status | changed \n " | /u
 if [[ ${system_type} == "synnex" ]]; then
   for i in {a..x}; do
     if [[ -d "/srv/node/sd${i}/accounts" ]]; then
-      echo -e " Crawling directory : /srv/node/sd${i}/accounts \n" | /usr/bin/tee -a ${log_file}
-      find /srv/node/sd${i}/accounts -type f -iname "*.db" -exec /usr/bin/sqlite3 {} "${sql_query}" >> ${log_file} \;
+      echo -e " Crawling directory : /srv/node/sd${i}/accounts" 
+      find /srv/node/sd${i}/accounts -type f -iname "*.db" -exec /usr/bin/sqlite3 -separator "," {} "${sql_query}" >> ${log_file} \;
     else
-      echo -e " Crawling directory : /srv/node/sd${i}/accounts (NO accounts directory found) " | /usr/bin/tee -a ${log_file}
+      echo -e " Crawling directory : /srv/node/sd${i}/accounts (NO accounts directory found) " 
     fi
   done
 
 elif [[ ${system_type} == "supermicro" ]]; then
   if [[ -d "/srv/node/c0u1/accounts" ]]; then
-    echo -e " Crawling directory : /srv/node/c0u1/accounts \n" | /usr/bin/tee -a ${log_file}
-    find /srv/node/c0u1//accounts -type f -iname "*.db" -exec /usr/bin/sqlite3 {} "${sql_query}" >> ${log_file} \;
+    echo -e " Crawling directory : /srv/node/c0u1/accounts " 
+    find /srv/node/c0u1//accounts -type f -iname "*.db" -exec /usr/bin/sqlite3 -separator "," {} "${sql_query}" >> ${log_file} \;
   else
-    echo -e " Crawling directory : /srv/node/c0u1/accounts (NO accounts directory found) " | /usr/bin/tee -a ${log_file}
+    echo -e " Crawling directory : /srv/node/c0u1/accounts (NO accounts directory found) "
   fi
 
 elif [[ ${system_type} == "proxy" ]]; then
   for i in 2 3 ; do
     if [[ -d "/srv/node/c0u${i}/accounts" ]]; then
-      echo -e " Crawling directory : /srv/node/c0u${i}/accounts \n" | /usr/bin/tee -a ${log_file}
-      find /srv/node/c0u${i}/accounts -type f -iname "*.db" -exec /usr/bin/sqlite3 {} "${sql_query}" >> ${log_file} \;
+      echo -e " Crawling directory : /srv/node/c0u${i}/accounts " 
+      find /srv/node/c0u${i}/accounts -type f -iname "*.db" -exec /usr/bin/sqlite3 -separator "," {} "${sql_query}" >> ${log_file} \;
     else
-      echo -e " Crawling directory : /srv/node/c0u${i}/accounts (NO accounts directory found) " | /usr/bin/tee -a ${log_file}
+      echo -e " Crawling directory : /srv/node/c0u${i}/accounts (NO accounts directory found) "
     fi
   done
 fi
