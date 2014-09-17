@@ -12,7 +12,7 @@ date=$(date +'%Y%m%d.%H%M%S.%Z')
 log_file="/tmp/account_crawler_info_${date}.log"
 
 # SQL QUERY
-sql_query="select account, datetime(created_at,'unixepoch') as created, datetime(delete_timestamp,'unixepoch') as deleted, status, status_changed_at as changed from account_stat where account LIKE '%"${accoun_type}"%'"
+sql_query="select account, datetime(created_at,'unixepoch') as created, datetime(delete_timestamp,'unixepoch') as deleted, status, status_changed_at as changed from account_stat where account LIKE '%"${account_type}"%'"
  
 
 # Usage
@@ -20,7 +20,7 @@ usage_display (){
 cat << USAGE
 
 Usage:
-    Running Syntax: sudo -u swift account_crawler_info.sh [system_type] [accoun_type]   
+    Running Syntax: sudo -u swift account_crawler_info.sh [system_type] [account_type]   
     System Types: synnex, supermicro, container and proxy  
     Account Type: SOSO, JungleDisk and MossoCloudFS 
 
