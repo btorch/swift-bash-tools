@@ -21,7 +21,7 @@ cat << USAGE
 
 Usage:
     Running Syntax: sudo -u swift account_crawler_info.sh [system_type] [accoun_type]   
-    System Types: synnex, supermicro and proxy  
+    System Types: synnex, supermicro, container and proxy  
     Account Type: SOSO, JungleDisk and MossoCloudFS 
 
 USAGE
@@ -65,9 +65,20 @@ if [[ ${system_type} == "synnex" ]]; then
 elif [[ ${system_type} == "supermicro" ]]; then
   if [[ -d "/srv/node/c0u1/accounts" ]]; then
     echo -e " Crawling directory : /srv/node/c0u1/accounts " 
-    find /srv/node/c0u1//accounts -type f -iname "*.db" -exec /usr/bin/sqlite3 -separator "," {} "${sql_query}" >> ${log_file} \;
+    find /srv/node/c0u1/accounts -type f -iname "*.db" -exec /usr/bin/sqlite3 -separator "," {} "${sql_query}" >> ${log_file} \;
   else
     echo -e " Crawling directory : /srv/node/c0u1/accounts (NO accounts directory found) "
+  fi
+
+elif [[ ${system_type} == "container" ]]; then
+  if [[ -d "/srv/node/c0u1/accounts" ]]; then
+    echo -e " Crawling directory : /srv/node/c0u1/accounts " 
+    find /srv/node/c0u1/accounts -type f -iname "*.db" -exec /usr/bin/sqlite3 -separator "," {} "${sql_query}" >> ${log_file} \;
+  elif [[ -d "/srv/node/sdb/accounts" ]]; then
+    echo -e " Crawling directory : /srv/node/sdb/accounts " 
+    find /srv/node/sdb/accounts -type f -iname "*.db" -exec /usr/bin/sqlite3 -separator "," {} "${sql_query}" >> ${log_file} \;
+  else
+    echo -e " Crawling directory : /srv/node/[c0u1|sdb]/accounts (NO accounts directory found) "
   fi
 
 elif [[ ${system_type} == "proxy" ]]; then
