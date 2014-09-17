@@ -8,11 +8,16 @@
 # VARS
 system_type=$1
 account_type=$2
+datetime_convert=$3
 date=$(date +'%Y%m%d.%H%M%S.%Z')
 log_file="/tmp/account_crawler_info_${date}.log"
 
 # SQL QUERY
-sql_query="select account, datetime(created_at,'unixepoch') as created, datetime(delete_timestamp,'unixepoch') as deleted, status, status_changed_at as changed from account_stat where account LIKE '%"${account_type}"%'"
+if [[ "${datetime_convert}" == "hdate" ]]; then 
+  sql_query="select account, datetime(created_at,'unixepoch') as created, datetime(delete_timestamp,'unixepoch') as deleted, status, status_changed_at as changed from account_stat where account LIKE '%"${account_type}"%'"
+else
+  sql_query="select account, created_at, delete_timestamp, status, status_changed_at as changed from account_stat where account LIKE '%"${account_type}"%'"
+fi
  
 
 # Usage
@@ -23,6 +28,7 @@ Usage:
     Running Syntax: sudo -u swift account_crawler_info.sh [system_type] [account_type]   
     System Types: synnex, supermicro, container and proxy  
     Account Type: SOSO, JungleDisk and MossoCloudFS 
+    Convert Date: For Human readible UTC dates give "hdate" as 3rd argument
 
 USAGE
 exit 1
